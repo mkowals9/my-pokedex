@@ -1,5 +1,10 @@
 .home-text{
-    color: blueviolet;
+    color: red;
     size: 45px;
     text-shadow: black 2px;
+}
+
+.pokeball-logo{
+    width: 25px;
+    height: 25px;
 }
