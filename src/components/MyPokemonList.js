@@ -6,24 +6,32 @@ const MyPokemonList = (props) => {
 
     const [pokemonList, setPokemonList] = useState([])
     const [currentUrl, setCurrentUrl] = useState(`https://pokeapi.co/api/v2/pokemon/`)
+    const [endOfData, setEndOfData] = useState(false)
 
     async function* fetchPokemons() {
         let url = currentUrl;
-        const response = await fetch(url);
-        const body = await response.json();
-        url = body.next;
-        for(let object of body.results) {
-          yield object;
+        if(url !== null){
+          const response = await fetch(url);
+          const body = await response.json();
+          url = body.next;
+          for(let object of body.results) {
+            yield object;
+          }
+          setCurrentUrl(url)
         }
-        setCurrentUrl(url)
+        else{
+            setEndOfData(true)
+        }
       }
     
     const show = async () => {
         let baseData = []
-        for await (const commit of fetchPokemons()) {
+        if(!endOfData){
+          for await (const commit of fetchPokemons()) {
             baseData.push(commit)
+          }
+          if(baseData.length) {setPokemonList(baseData)}  
         }
-        setPokemonList(baseData)    
     }
 
     const getInfo = async () => {
@@ -40,7 +48,6 @@ const MyPokemonList = (props) => {
     return(
         <>
         <button onClick={() => getAll()}> Kliknij! </button>
-        <button onClick={() => getInfo()}> Kliknij po 2! </button>
         </>
     )
 }
