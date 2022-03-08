@@ -2,67 +2,77 @@ import { connect } from "react-redux";
 import { useState, useEffect, useRef } from "react";
 import { mapToPokemon } from "../models/Pokemon";
 import Pokeball from '../images/poke_ball_icon.svg'
+import {Oval} from 'react-loading-icons'
 
 const MyPokemonList = (props) => {
 
     const pokemonList = useRef(null)
     const [currentUrl, setCurrentUrl] = useState(`https://pokeapi.co/api/v2/pokemon/`)
     const [endOfData, setEndOfData] = useState(false)
+    const [generatorInstance] = useState(fetchPokemons(currentUrl))
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState(false)
 
-    async function* fetchPokemons() {
-        let url = currentUrl;
-        if(url !== null){
-          const response = await fetch(url, {
-            headers : { 
-              'Content-Type': 'application/json',
-              'Accept': 'application/json'
-             }
-      
-          });
-          const body = await response.json();
-          url = body.next;
-          for(let object of body.results) {
-            yield object;
-          }
-          setCurrentUrl(url)
-        }
-        else{
-            setEndOfData(true)
-        }
+    async function* fetchPokemons(initialUrl) { 
+      let url = initialUrl
+      let listPokemons = []; 
+      while (url !== null) {  
+        const response = await fetch(url);
+        const body = await response.json();
+        url = body.next;
+        yield body.results
+        pokemonList.current = listPokemons
+        setCurrentUrl(url)  
       }
+    }
     
-    const show = async () => {
+    const getPokemonsBasicInfo = async () => {
         let baseData = []
         if(!endOfData){
-          for await (const commit of fetchPokemons()) {
-            baseData.push(commit)
-          }
-          if(baseData.length) {pokemonList.current = baseData}  
+          baseData = await generatorInstance.next()
+          pokemonList.current = baseData.value
         }
     }
 
-    const getInfo = async () => {
+    const getMoreDetailsAboutPokemons = async () => {
       let currentPokemonList = pokemonList.current
-      if(!endOfData && currentPokemonList.length){
-        let lista = currentPokemonList.map(element =>  mapToPokemon(element))
+      if(!endOfData && currentPokemonList){
+        let lista = currentPokemonList.map(element => mapToPokemon(element))
         lista = await Promise.all(lista)
         pokemonList.current = lista
         props.setPokemonList(pokemonList.current)
+        setLoading(false)
       }
     }
 
-    const getAll = async () => {
-      await show()
-      await getInfo()
+    const getPokemons = async () => {
+      setLoading(true)
+      await getPokemonsBasicInfo()
+      await getMoreDetailsAboutPokemons()
     }
 
     useEffect(() => {
-      getAll()
-    }, );
+      getPokemons()
+    }, []);
+
+    if(loading){
+      return (        
+        <div>
+          <img className="pokeball-logo" src={Pokeball} alt="Pokeball" onClick={() => getPokemons()}/>
+          <Oval stroke="red" />
+        </div>   
+      )
+    }
+
+    if(error){
+      return(<>
+        <lable>Error occured while fetching data.</lable>
+      </>)
+    }
 
     return(
         <>
-          <img className="pokeball-logo" src={Pokeball} alt="Pokeball" onClick={() => getAll()}/>
+          <img className="pokeball-logo" src={Pokeball} alt="Pokeball" onClick={() => getPokemons()}/>
         </>
     )
 }
