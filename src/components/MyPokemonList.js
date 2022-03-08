@@ -2,8 +2,6 @@ import { connect } from "react-redux";
 import { useState, useEffect, useRef } from "react";
 import { mapToPokemon } from "../models/Pokemon";
 import Pokeball from '../images/poke_ball_icon.svg'
-import {Oval} from 'react-loading-icons'
-import ReactPaginate from 'react-paginate';
 import {SinglePokemon} from "./SinglePokemon";
 
 const MyPokemonList = (props) => {
@@ -14,8 +12,6 @@ const MyPokemonList = (props) => {
     const [generatorInstance] = useState(fetchPokemons(currentUrl))
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(false)
-    let currentPage = 0;
-    const allPages = 57;
 
     async function* fetchPokemons(initialUrl) { 
       let url = initialUrl 
@@ -55,10 +51,6 @@ const MyPokemonList = (props) => {
       setLoading(true)
       await getPokemonsBasicInfo()
       await getMoreDetailsAboutPokemons()
-    }
-
-    const handlePageChange = (event) => {
-      console.log("event sel", event)
     }
 
     useEffect(() => {
