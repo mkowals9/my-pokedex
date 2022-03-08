@@ -14,14 +14,12 @@ const MyPokemonList = (props) => {
     const [error, setError] = useState(false)
 
     async function* fetchPokemons(initialUrl) { 
-      let url = initialUrl
-      let listPokemons = []; 
+      let url = initialUrl 
       while (url !== null) {  
         const response = await fetch(url);
         const body = await response.json();
         url = body.next;
         yield body.results
-        pokemonList.current = listPokemons
         setCurrentUrl(url)  
       }
     }
