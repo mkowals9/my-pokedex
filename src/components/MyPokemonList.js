@@ -47,8 +47,8 @@ const MyPokemonList = (props) => {
         lista = await Promise.all(lista)
         pokemonList.current = lista
         props.setPokemonList(pokemonList.current)
-        setLoading(false)
       }
+        setLoading(false)
     }
 
     const getPokemons = async () => {
@@ -81,6 +81,7 @@ const MyPokemonList = (props) => {
 
     return(
         <div className=" flex flex-col items-center">
+          { currentUrl === null ? (<label className="text-gray-500">There isn't any more Pokémons. </label>) : (<></>) }
           <div className="flex flex-row justify-center"> 
             <img className={`w-10${loading ? ' animate-spin' : ''}`} src={Pokeball} alt="Pokeball" onClick={() => getPokemons()}/> </div>          
           <div>
