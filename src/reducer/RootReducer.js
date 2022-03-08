@@ -4,9 +4,9 @@ const initState = {
 
 const rootReducer = ( state = initState, action ) => {
     switch(action.type){
-        case 'ADD_POKEMON_LIST':
+        case 'ADD_NEW_POKEMONS':
             return { ...state,
-            pokemonList: action.pokemonList
+            pokemonList: state.pokemonList.push(action.pokemonList) 
         }
         default:
             return state;

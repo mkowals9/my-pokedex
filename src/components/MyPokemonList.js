@@ -1,10 +1,11 @@
 import { connect } from "react-redux";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { mapToPokemon } from "../models/Pokemon";
+import Pokeball from '../images/poke_ball_icon.svg'
 
 const MyPokemonList = (props) => {
 
-    const [pokemonList, setPokemonList] = useState([])
+    const pokemonList = useRef(null)
     const [currentUrl, setCurrentUrl] = useState(`https://pokeapi.co/api/v2/pokemon/`)
     const [endOfData, setEndOfData] = useState(false)
 
@@ -30,24 +31,32 @@ const MyPokemonList = (props) => {
           for await (const commit of fetchPokemons()) {
             baseData.push(commit)
           }
-          if(baseData.length) {setPokemonList(baseData)}  
+          if(baseData.length) {pokemonList.current = baseData}  
         }
     }
 
     const getInfo = async () => {
-        let lista = pokemonList.map(element =>  mapToPokemon(element))
+      let currentPokemonList = pokemonList.current
+      if(!endOfData && currentPokemonList.length){
+        let lista = currentPokemonList.map(element =>  mapToPokemon(element))
         lista = await Promise.all(lista)
-        console.log("lets see ", lista)
+        pokemonList.current = lista
+        console.log("see ", pokemonList)
+      }
     }
 
-    const getAll = () => {
-      show()
-      getInfo()
+    const getAll = async () => {
+      await show()
+      await getInfo()
     }
+
+    useEffect(() => {
+      getAll()
+    }, []);
 
     return(
         <>
-        <button onClick={() => getAll()}> Kliknij! </button>
+          <img className="pokeball-logo" src={Pokeball} alt="Pokeball" onClick={() => getAll()}/>
         </>
     )
 }
@@ -59,7 +68,11 @@ const mapStateToProps = (state) => {
   };
   
   const mapDispatchToProps = (dispatch) => {
-    return {};
+    return {
+      setPokemonList: (newPokemonList) => {
+          dispatch({type: "ADD_NEW_POKEMONS", newPokemonList: newPokemonList})
+      }
+    };
   };
   
   export default connect(mapStateToProps, mapDispatchToProps)(MyPokemonList);
