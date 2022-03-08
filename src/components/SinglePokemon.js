@@ -22,8 +22,8 @@ export const SinglePokemon = (props) => {
                         <label>Height: {props.item.height}</label>
                     </>)}
             </div>
-            <div className="bg-red-200 dark:bg-red-400 w-1/5 rounded-md shadow">
-                <img className="w-full" src={props.item.sprite} alt=" "/>
+            <div className="bg-red-200 dark:bg-red-400 w-1/5 p-1 rounded-md shadow">
+                <img className="w-full p-1" src={props.item.sprite} alt=" "/>
             </div>
         </div>
     )
