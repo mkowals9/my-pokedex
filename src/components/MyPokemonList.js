@@ -41,7 +41,7 @@ const MyPokemonList = (props) => {
         let lista = currentPokemonList.map(element =>  mapToPokemon(element))
         lista = await Promise.all(lista)
         pokemonList.current = lista
-        console.log("see ", pokemonList)
+        props.setPokemonList(pokemonList.current)
       }
     }
 
@@ -52,7 +52,7 @@ const MyPokemonList = (props) => {
 
     useEffect(() => {
       getAll()
-    }, []);
+    }, );
 
     return(
         <>

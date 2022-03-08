@@ -1,12 +1,18 @@
 const initState = {
-    pokemonList: {}
+    pokemonList: []
 }
 
 const rootReducer = ( state = initState, action ) => {
     switch(action.type){
         case 'ADD_NEW_POKEMONS':
-            return { ...state,
-            pokemonList: state.pokemonList.push(action.pokemonList) 
+            {
+                let oldList = state.pokemonList
+                let toAddPage = { index: oldList.length, pokemons: action.newPokemonList }
+                oldList.push(toAddPage)
+                return { ...state,
+                    pokemonList: oldList
+            }
+            
         }
         default:
             return state;
