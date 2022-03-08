@@ -5,7 +5,7 @@ import MyPokemonList from "./components/MyPokemonList"
 function App() {
   return (
     <div className="App">
-      <h1 className='home-text'>My PokéDex!</h1>
+      <h1>My PokéDex!</h1>
       <MyPokemonList/>
     </div>
   );

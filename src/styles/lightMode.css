@@ -5,7 +5,35 @@
     text-shadow: black 2px;
 }
 
-.pokeball-logo{
+.pokeball{
     width: 25px;
     height: 25px;
+    grid-area: header;
+    align-content: center;
+}
+
+.pokemon-element{
+    background-color: aquamarine;
+    display: flex;
+    flex-direction: column;
+}
+
+.list{
+    display: flex;
+    flex-direction: column;
+}
+
+.nav{
+    display: inline;
+    flex-direction: row;
+}
+
+.grid-container{
+    display: grid;
+    padding: 10px;
+    gap: 10px;
+    grid-template-areas: 
+        'header'
+        'list'
+        'nav';
 }

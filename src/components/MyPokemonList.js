@@ -3,6 +3,9 @@ import { useState, useEffect, useRef } from "react";
 import { mapToPokemon } from "../models/Pokemon";
 import Pokeball from '../images/poke_ball_icon.svg'
 import {Oval} from 'react-loading-icons'
+import ReactPaginate from 'react-paginate';
+import {SinglePokemon} from "./SinglePokemon";
+import '../styles/lightMode.css'
 
 const MyPokemonList = (props) => {
 
@@ -12,6 +15,8 @@ const MyPokemonList = (props) => {
     const [generatorInstance] = useState(fetchPokemons(currentUrl))
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState(false)
+    let currentPage = 0;
+    const allPages = 57;
 
     async function* fetchPokemons(initialUrl) { 
       let url = initialUrl 
@@ -53,6 +58,10 @@ const MyPokemonList = (props) => {
       await getMoreDetailsAboutPokemons()
     }
 
+    const handlePageChange = (event) => {
+      console.log("event sel", event.selected)
+    }
+
     useEffect(() => {
       getPokemons()
     }, []);
@@ -60,7 +69,6 @@ const MyPokemonList = (props) => {
     if(loading){
       return (        
         <div>
-          <img className="pokeball-logo" src={Pokeball} alt="Pokeball" onClick={() => getPokemons()}/>
           <Oval stroke="red" />
         </div>   
       )
@@ -73,9 +81,24 @@ const MyPokemonList = (props) => {
     }
 
     return(
-        <>
-          <img className="pokeball-logo" src={Pokeball} alt="Pokeball" onClick={() => getPokemons()}/>
-        </>
+        <div className="grid-container">
+          <div className="pokeball"> <img className="pokeball-logo" src={Pokeball} alt="Pokeball" onClick={() => getPokemons()}/> </div>          
+          <div className="list">
+                {
+                  props.pokemonList.length > 0 ? (props.pokemonList[currentPage].pokemons).map((element, index) => 
+                    (<SinglePokemon key={index} item={element}/>)) : (<></>)
+                }
+          </div>
+          <div className="nav">
+            <ReactPaginate
+              onPageChange={() => handlePageChange()}
+              pageCount={10}
+              pageRangeDisplayed={1}
+              marginPagesDisplayed={2}
+
+              />
+          </div>
+        </div>
     )
 }
 
