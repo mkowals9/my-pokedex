@@ -8,7 +8,7 @@ export const SinglePokemon = (props) => {
     return(
         <div className="flex flex-row bg-red-300 dark:bg-red-600 m-3 p-3 rounded-md justify-between items-center shadow-md transition ease-in-out hover:scale-105" onClick={() => setShowMoreInfo(!showMoreInfo)}>
             <div className="flex flex-col text-sm" >
-                <label className="font-semibold text-red-900 capitalize text-2xl">{props.item.name}</label>
+                <label className="font-semibold text-red-900 dark:text-black capitalize text-2xl">{props.item.name}</label>
                 <div className="flex flex-row space-x-3">
                     <label>Types: </label>
                     <div className="flex flex-row">
