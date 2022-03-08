@@ -15,8 +15,12 @@ const MyPokemonList = (props) => {
 
     async function* fetchPokemons(initialUrl) { 
       let url = initialUrl 
-      while (url !== null) {  
-        const response = await fetch(url);
+      while (url !== null) { 
+        let response = {};
+        try{
+          response = await fetch(url);
+        } 
+        catch { setError(true)}
         const body = await response.json();
         url = body.next;
         yield body.results
