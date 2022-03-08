@@ -65,10 +65,10 @@ const MyPokemonList = (props) => {
       getPokemons()
     }, []);
 
-    if(loading){
+    if(loading && props.pokemonList.length === 0){
       return (        
         <div>
-          <Oval stroke="red" />
+          <img className="w-10 animate-spin" src={Pokeball} alt="Pokeball"/>
         </div>   
       )
     }
@@ -81,7 +81,8 @@ const MyPokemonList = (props) => {
 
     return(
         <div className=" flex flex-col items-center">
-          <div className="flex flex-row justify-center"> <img className="w-10" src={Pokeball} alt="Pokeball" onClick={() => getPokemons()}/> </div>          
+          <div className="flex flex-row justify-center"> 
+            <img className={`w-10${loading ? ' animate-spin' : ''}`} src={Pokeball} alt="Pokeball" onClick={() => getPokemons()}/> </div>          
           <div>
                 {
                   props.pokemonList.length > 0 ? (props.pokemonList).map((element, index) => 
