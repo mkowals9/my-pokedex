@@ -6,7 +6,8 @@ export async function mapToPokemon(pokemon) {
         types: pokemonInfo.types.reduce(((types,type)=>[...types,type.type.name]),[]),
         abilities: pokemonInfo.abilities.reduce(((abilities,ability)=>[...abilities,ability.ability.name]),[]),
         weight: pokemonInfo.weight,
-        height: pokemonInfo.height
+        height: pokemonInfo.height,
+        sprite: pokemonInfo.sprites.front_default
     }
 }
 

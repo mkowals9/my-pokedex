@@ -7,10 +7,8 @@ const rootReducer = ( state = initState, action ) => {
         case 'ADD_NEW_POKEMONS':
             {
                 let oldList = state.pokemonList
-                let toAddPage = { index: oldList.length, pokemons: action.newPokemonList }
-                oldList.push(toAddPage)
                 return { ...state,
-                    pokemonList: oldList
+                    pokemonList: [...action.newPokemonList, ...oldList]
             }
             
         }
